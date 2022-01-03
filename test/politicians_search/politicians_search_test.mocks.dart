@@ -2,13 +2,15 @@
 // in politicando/test/politicians_search/politicians_search_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:politicando/app/core/models/politician_search_model.dart'
-    as _i4;
-import 'package:politicando/app/core/repositories/politicians_repository_interface.dart'
+import 'package:politicando/app/core/models/detailed_politician/detailed_politician_model.dart'
     as _i2;
+import 'package:politicando/app/core/models/politician_search_model.dart'
+    as _i5;
+import 'package:politicando/app/core/repositories/politicians_repository_interface.dart'
+    as _i3;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -19,20 +21,31 @@ import 'package:politicando/app/core/repositories/politicians_repository_interfa
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
+class _FakeDetailedPoliticianModel_0 extends _i1.Fake
+    implements _i2.DetailedPoliticianModel {}
+
 /// A class which mocks [PoliticiansRepositoryInterface].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPoliticiansRepositoryInterface extends _i1.Mock
-    implements _i2.PoliticiansRepositoryInterface {
+    implements _i3.PoliticiansRepositoryInterface {
   MockPoliticiansRepositoryInterface() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<List<_i4.PoliticianSearchModel>> searchPoliticians(
+  _i4.Future<List<_i5.PoliticianSearchModel>> searchPoliticians(
           String? search) =>
       (super.noSuchMethod(Invocation.method(#searchPoliticians, [search]),
-              returnValue: Future<List<_i4.PoliticianSearchModel>>.value(
-                  <_i4.PoliticianSearchModel>[]))
-          as _i3.Future<List<_i4.PoliticianSearchModel>>);
+              returnValue: Future<List<_i5.PoliticianSearchModel>>.value(
+                  <_i5.PoliticianSearchModel>[]))
+          as _i4.Future<List<_i5.PoliticianSearchModel>>);
+  @override
+  _i4.Future<_i2.DetailedPoliticianModel> getDetailedPolitician(
+          int? politicianId) =>
+      (super.noSuchMethod(
+              Invocation.method(#getDetailedPolitician, [politicianId]),
+              returnValue: Future<_i2.DetailedPoliticianModel>.value(
+                  _FakeDetailedPoliticianModel_0()))
+          as _i4.Future<_i2.DetailedPoliticianModel>);
 }

@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:politicando/app/core/controllers/politicians_controller.dart';
+import 'package:politicando/app/core/repositories/politicians_repository_dio.dart';
+import 'package:provider/provider.dart';
+
+import './core/config/app_routes.dart';
+import './core/config/app_config.dart';
 import './core/theme/app_theme.dart';
 
 class AppWidget extends StatelessWidget {
@@ -8,11 +14,15 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppTheme.light(),
-      home: Scaffold(
-        appBar: AppBar(title: Text('Politicando')),
-      )
+    return ChangeNotifierProvider(
+      create: (_) => PoliticiansController(PoliticiansRepositoryDio()),
+      builder: (_, __) {
+        return MaterialApp(
+          theme: AppTheme.light(),
+          title: AppConfig.appName,
+          routes: AppRoutes.routes
+        );
+      },
     );
   }
 }
