@@ -130,9 +130,12 @@ class _HomePageState extends State<HomePage>
                 child: Consumer<PoliticiansController>(
                   builder: (context, controller, child) {
                     if (controller.state == AppState.error) {
-                      return Text(
-                        controller.error ?? 'Um erro inesperado ocorreu',
-                        style: AppTextStyles.body.copyWith(color: AppColors.error)
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          controller.error ?? 'Um erro inesperado ocorreu',
+                          style: AppTextStyles.body.copyWith(color: AppColors.error)
+                        ),
                       );
                     }
 

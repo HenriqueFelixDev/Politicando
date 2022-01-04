@@ -1,6 +1,8 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
+import 'package:politicando/app/core/errors/app_error.dart';
+import 'package:politicando/app/core/errors/connection_exception.dart';
 import 'package:politicando/app/core/models/detailed_politician/detailed_politician_model.dart';
 
 import './app_controller.dart';
@@ -21,6 +23,9 @@ class PoliticiansController extends ChangeNotifier with AppController {
       notifyListeners();
       _politicians = await _politiciansRepository.searchPoliticians(search);
       state = AppState.state;
+    } on ConnectionException catch (e) {
+      state = AppState.error;
+      error = e.message;
     } catch (e) {
       state = AppState.error;
       error = e.toString();

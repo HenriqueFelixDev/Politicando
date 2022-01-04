@@ -37,42 +37,52 @@ class PoliticiansRepositoryDio implements PoliticiansRepositoryInterface {
         )
       ).toList();
     } on DioError catch (e) {
-      throw ConnectionException("Erro na comunicação com o servidor: " + e.message);
+      throw ConnectionException(
+        'Erro na comunicação com o servidor: '
+        'Verifique sua comunicação com a internet'
+      );
     }
   }
 
   @override
   Future<DetailedPoliticianModel> getDetailedPolitician(int politicianId) async {
-    final response = await getClient().get('/deputados/$politicianId');
-    final politicianMap = response.data['dados'];
-    
-    return DetailedPoliticianModel(
-      id: politicianMap['id'],
-      civilName: politicianMap['nomeCivil'],
-      birthday: DateTime.parse(politicianMap['dataNascimento']),
-      photo: politicianMap['ultimoStatus']['urlFoto'],
-      socialMedia: [],
-      scholarity: politicianMap['escolaridade'],
-      birthdayCity: politicianMap['municipioNascimento'],
-      birthdayState: politicianMap['ufNascimento'],
-      candidacyInfo: CandidacyInfoModel(
-        electoralName: politicianMap['ultimoStatus']['nomeEleitoral'],
-        politicalParty: politicianMap['ultimoStatus']['siglaPartido'],
-        electoralCondition: politicianMap['ultimoStatus']['condicaoEleitoral'],
-        uf: politicianMap['ultimoStatus']['siglaUf'],
-        date: DateTime.parse(politicianMap['ultimoStatus']['data']),
-        status: politicianMap['ultimoStatus']['situacao'],
-        email: politicianMap['ultimoStatus']['email'],
-        parliamentaryOffice: ParliamentaryOfficeModel(
-          name: politicianMap['ultimoStatus']['gabinete']['nome'].toString(),
-          room: politicianMap['ultimoStatus']['gabinete']['sala'].toString(),
-          floor: politicianMap['ultimoStatus']['gabinete']['andar'].toString(),
-          building: politicianMap['ultimoStatus']['gabinete']['predio'].toString(),
-          phone: politicianMap['ultimoStatus']['gabinete']['telefone'].toString(),
-          email: politicianMap['ultimoStatus']['gabinete']['email'].toString()
+    try {
+      final response = await getClient().get('/deputados/$politicianId');
+      final politicianMap = response.data['dados'];
+      
+      return DetailedPoliticianModel(
+        id: politicianMap['id'],
+        civilName: politicianMap['nomeCivil'],
+        birthday: DateTime.parse(politicianMap['dataNascimento']),
+        photo: politicianMap['ultimoStatus']['urlFoto'],
+        socialMedia: [],
+        scholarity: politicianMap['escolaridade'],
+        birthdayCity: politicianMap['municipioNascimento'],
+        birthdayState: politicianMap['ufNascimento'],
+        candidacyInfo: CandidacyInfoModel(
+          electoralName: politicianMap['ultimoStatus']['nomeEleitoral'],
+          politicalParty: politicianMap['ultimoStatus']['siglaPartido'],
+          electoralCondition: politicianMap['ultimoStatus']['condicaoEleitoral'],
+          uf: politicianMap['ultimoStatus']['siglaUf'],
+          date: DateTime.parse(politicianMap['ultimoStatus']['data']),
+          status: politicianMap['ultimoStatus']['situacao'],
+          email: politicianMap['ultimoStatus']['email'],
+          parliamentaryOffice: ParliamentaryOfficeModel(
+            name: politicianMap['ultimoStatus']['gabinete']['nome'].toString(),
+            room: politicianMap['ultimoStatus']['gabinete']['sala'].toString(),
+            floor: politicianMap['ultimoStatus']['gabinete']['andar'].toString(),
+            building: politicianMap['ultimoStatus']['gabinete']['predio'].toString(),
+            phone: politicianMap['ultimoStatus']['gabinete']['telefone'].toString(),
+            email: politicianMap['ultimoStatus']['gabinete']['email'].toString()
+          )
         )
-      )
-    );
+      );
+    } on DioError catch(e) {
+      throw ConnectionException(
+        'Erro na comunicação com o servidor: '
+        'Verifique sua comunicação com a internet'
+      );
+    }
   }
 
 }

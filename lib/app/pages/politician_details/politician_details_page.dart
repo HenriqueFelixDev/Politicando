@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:politicando/app/core/errors/connection_exception.dart';
 import 'package:provider/provider.dart';
 
 import 'components/politician_details_header/politician_details_header_widget.dart';
@@ -34,9 +35,20 @@ class _PoliticianDetailsPageState extends State<PoliticianDetailsPage> {
           future: context.read<PoliticiansController>().getDetailedPolitician(widget.politicianId),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Text(
-                snapshot.error?.toString() ?? 'Um erro inesperado ocorreu',
-                style: AppTextStyles.body.copyWith(color: AppColors.error),
+              String error = snapshot.error?.toString() ?? 'Um erro inesperado ocorreu';
+
+              if (snapshot.error is ConnectionException) {
+                error = (snapshot.error as ConnectionException).message;
+              }
+
+              return SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    error,
+                    style: AppTextStyles.body.copyWith(color: AppColors.error),
+                  ),
+                )
               );
             }
     
