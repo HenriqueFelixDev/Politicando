@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:politicando/app/core/controllers/connection_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/politician_card/politician_card_widget.dart';
@@ -172,7 +173,37 @@ class _HomePageState extends State<HomePage>
               ),
             )
           ]
-        )
+        ),
+        bottomNavigationBar: Consumer<ConnectionController>(
+          builder: (context, connectionController, child) {
+            return ValueListenableBuilder(
+              valueListenable: connectionController.connectionState,
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                color: AppColors.error,
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.wifi,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 8.0),
+                    Text(
+                      'Sem conexão com a internet',
+                      style: TextStyle(color: Colors.white)
+                    )
+                  ]
+                )
+              ),
+              builder: (context, value, child) {
+                return Offstage(
+                  offstage: value != InternetConnectionState.none,
+                  child: child
+                );
+              },
+            );
+          }
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:politicando/app/core/controllers/connection_controller.dart';
 import 'package:politicando/app/core/controllers/politicians_controller.dart';
 import 'package:politicando/app/core/repositories/politicians_repository_dio.dart';
 import 'package:provider/provider.dart';
@@ -14,15 +15,18 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => PoliticiansController(PoliticiansRepositoryDio()),
-      builder: (_, __) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PoliticiansController(PoliticiansRepositoryDio())),
+        Provider(create: (_) => ConnectionController())
+      ],
+      builder: (context, child) {
         return MaterialApp(
           theme: AppTheme.light(),
           title: AppConfig.appName,
           routes: AppRoutes.routes
         );
-      },
+      }
     );
   }
 }
