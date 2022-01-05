@@ -96,6 +96,60 @@ class _HomePageState extends State<HomePage>
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
+            Offstage(
+              offstage: !isSearching,
+              child: Container(
+                margin: const EdgeInsets.only(top: 100.0),
+                child: Consumer<PoliticiansController>(
+                  builder: (context, controller, child) {
+                    if (controller.state == AppState.error) {
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          controller.error ?? 'Um erro inesperado ocorreu',
+                          style: AppTextStyles.body.copyWith(color: AppColors.error)
+                        ),
+                      );
+                    }
+
+                    if (controller.state == AppState.loading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    
+                    if (controller.state == AppState.none || controller.politicians.isEmpty) {
+                      return Container(
+                        alignment: Alignment.topCenter,
+                        child: Column(
+                          children: [
+                            const Text('Sem Resultados'),
+                            const SizedBox(height: 8.0),
+                            Image.asset(AppImages.noData, width: 250.0, opacity: const AlwaysStoppedAnimation(0.3))
+                          ]
+                        )
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: controller.politicians.length,
+                      itemBuilder: (context, index) {
+                        final politician = controller.politicians[index];
+
+                        return PoliticianCardWidget(
+                          politicianSearch: politician,
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.politicianDetails,
+                              arguments: politician.id
+                            );
+                          },
+                        );
+                      },
+                    );
+                  }
+                )
+              ),
+            ),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: AlignTransition(
@@ -123,55 +177,6 @@ class _HomePageState extends State<HomePage>
                 )
               ),
             ),
-            
-            Offstage(
-              offstage: !isSearching,
-              child: Container(
-                margin: const EdgeInsets.only(top: 100.0),
-                child: Consumer<PoliticiansController>(
-                  builder: (context, controller, child) {
-                    if (controller.state == AppState.error) {
-                      return Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          controller.error ?? 'Um erro inesperado ocorreu',
-                          style: AppTextStyles.body.copyWith(color: AppColors.error)
-                        ),
-                      );
-                    }
-
-                    if (controller.state == AppState.loading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    
-                    if (controller.state == AppState.none || controller.politicians.isEmpty) {
-                      return Container(
-                        alignment: Alignment.topCenter,
-                        margin: const EdgeInsets.only(top: 16.0),
-                        child: Image.asset(AppImages.noData, width: 250.0)
-                      );
-                    }
-
-                    return ListView.builder(
-                      itemCount: controller.politicians.length,
-                      itemBuilder: (context, index) {
-                        final politician = controller.politicians[index];
-
-                        return PoliticianCardWidget(
-                          politicianSearch: politician,
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              AppRoutes.politicianDetails,
-                              arguments: politician.id
-                            );
-                          },
-                        );
-                      },
-                    );
-                  }
-                )
-              ),
-            )
           ]
         ),
         bottomNavigationBar: Consumer<ConnectionController>(
